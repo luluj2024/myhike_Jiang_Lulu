@@ -24,6 +24,26 @@
 // }
 // getNameFromAuth(); //run the function
 
+function insertNameFromFirestore() {
+    // Check if the user is logged in:
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            console.log(user.uid); // Let's know who the logged-in user is by logging their UID
+            currentUser = db.collection("users").doc(user.uid); // Go to the Firestore document of the user
+            currentUser.get().then(userDoc => {
+                // Get the user name
+                let userName = userDoc.data().name;
+                console.log(userName);
+                //$("#name-goes-here").text(userName); // jQuery
+                document.getElementById("name-goes-here").innerText = userName;
+            })
+        } else {
+            console.log("No user is logged in."); // Log a message when no user is logged in
+        }
+    })
+}
+insertNameFromFirestore();
+
 // Function to read the quote of the day from the Firestore "quotes" collection
 // Input param is the String representing the day of the week, aka, the document name
 function readQuote(day) {
@@ -38,8 +58,9 @@ function readQuote(day) {
 		  //document.querySelector("#quote-goes-here").innerHTML = dayDoc.data().quote;
       })
 }
-readQuote("tuesday");        //calling the function
+readQuote("tuesday");        //calling the function, or grab today's date
 
+// one-time only for data creation 
 function writeHikes() {
     //define a variable for the collection you want to create in Firestore to populate data
     var hikesRef = db.collection("hikes");
@@ -50,7 +71,7 @@ function writeHikes() {
         city: "Burnaby",
         province: "BC",
         level: "easy",
-				details: "A lovely place for lunch walk",
+		details: "A lovely place for lunch walk",
         length: 10,          //number value
         hike_time: 60,       //number value
         lat: 49.2467097082573,
@@ -123,3 +144,7 @@ function displayCardsDynamically(collection) {
 }
 
 displayCardsDynamically("hikes");  //input param is the name of the collection
+
+
+
+
