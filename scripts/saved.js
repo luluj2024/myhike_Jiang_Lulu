@@ -38,14 +38,14 @@ function getBookmarks(user) {
     db.collection("users").doc(user.uid).get()
         .then(userDoc => {
 
-					  // Get the Array of bookmarks
+			// Get the Array of bookmarks
             var bookmarks = userDoc.data().bookmarks;
             console.log(bookmarks);
 						
-						// Get pointer the new card template
+			// Get pointer the new card template
             let newcardTemplate = document.getElementById("savedCardTemplate");
 
-						// Iterate through the ARRAY of bookmarked hikes (document ID's)
+			// Iterate through the ARRAY of bookmarked hikes (document ID's)
             bookmarks.forEach(thisHikeID => {
                 console.log(thisHikeID);
                 db.collection("hikes").doc(thisHikeID).get().then(doc => {
@@ -69,7 +69,7 @@ function getBookmarks(user) {
                         "Duration: " + doc.data().hike_time + "min <br>" +
                         "Last updated: " + doc.data().last_updated.toDate().toLocaleDateString();
 
-										//Finally, attach this new card to the gallery
+					//Finally, attach this new card to the gallery
                     hikeCardGroup.appendChild(newcard);
                 })
             });
